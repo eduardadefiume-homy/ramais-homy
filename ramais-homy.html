@@ -282,7 +282,7 @@ async function fetchRamais(token) {
 
   // 2. Busca itens da lista
   const listRes = await fetch(
-    `https://graph.microsoft.com/v1.0/sites/${site.id}/lists/${LIST_NAME}/items?expand=fields($select=Title,Ramal,Departamento,Email,Celular)&$top=500`,
+    `https://graph.microsoft.com/v1.0/sites/${site.id}/lists/${LIST_NAME}/items?expand=fields($select=Title,Ramal,Departamento,Email,Celular,E_x002d_mail)&$top=500`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
   if (!listRes.ok) throw new Error("Erro ao buscar lista: " + listRes.status);
@@ -292,7 +292,7 @@ async function fetchRamais(token) {
     Nome:         i.fields.Title        || "",
     Ramal:        i.fields.Ramal        || "",
     Departamento: i.fields.Departamento || "Geral",
-    Email:        i.fields.Email        || "",
+    Email:        i.fields["E_x002d_mail"] || i.fields.Email || "",
     Celular:      i.fields.Celular      || ""
   }));
 }
