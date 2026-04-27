@@ -22,6 +22,12 @@
       --shadow:     0 2px 16px rgba(27,94,138,.10);
     }
     body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+    #watermark {
+      position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+      width:520px; max-width:70vw;
+      opacity:0.045; pointer-events:none; z-index:0; user-select:none;
+    }
+    #grid, .toolbar, .stats { position:relative; z-index:1; }
 
     header {
       background: linear-gradient(135deg, var(--brand) 0%, var(--accent) 100%);
@@ -38,6 +44,7 @@
     }
     header h1 { font-size:17px; font-weight:600; letter-spacing:.2px; }
     .header-right { display:flex; align-items:center; gap:10px; }
+    #btn-admin { display:none; }
     #btn-admin, #btn-manual {
       background:rgba(255,255,255,.15); border:1.5px solid rgba(255,255,255,.4);
       color:#fff; padding:7px 16px; border-radius:8px; cursor:pointer;
@@ -195,7 +202,7 @@
 
 <header>
   <div class="header-left">
-    <div class="logo">Homy</div>
+    <img src="homy_icon_4k_transparent.webp" alt="Homy" style="height:42px;width:42px;object-fit:contain;filter:drop-shadow(0 1px 3px rgba(0,0,0,.2));">
     <h1>📞 Lista de Ramais</h1>
   </div>
   <div class="header-right">
@@ -206,6 +213,7 @@
   </div>
 </header>
 
+<img id="watermark" src="homy_logo_4k_optimized.webp" alt="">
 <div class="toolbar">
   <div id="search-wrap">
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
@@ -266,6 +274,7 @@ const CLIENT_ID  = "2e73e8be-484b-428e-a6c0-c75b1bf70d8a";
 const TENANT_ID  = "a2850abc-334a-4805-b6b2-420b4aef68a9";
 const SITE_NAME  = "Ramais-Homy";
 const LIST_NAME  = "Ramais";
+const ADMINS     = ["eduarda.defiume@homyquimica.com.br", "recepcao.hq@homyquimica.com.br"];
 // ============================================================
 
 const msalConfig = {
@@ -353,6 +362,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     const token = await getToken();
     if (!token) return; // redirecionando para login
+
+    // Mostra botão admin apenas para usuários autorizados
+    const accounts = msalInstance.getAllAccounts();
+    if (accounts.length > 0) {
+      const email = accounts[0].username.toLowerCase();
+      if (ADMINS.includes(email)) {
+        document.getElementById("btn-admin").style.display = "flex";
+      }
+    }
 
     const dados = await fetchRamais(token);
     if (dados.length > 0) {
