@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ramais · Homy Química</title>
+  <link rel="icon" type="image/webp" href="homy_icon_4k_transparent.webp">
   <script src="https://cdn.jsdelivr.net/npm/@azure/msal-browser@3.28.0/lib/msal-browser.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -36,13 +37,38 @@
       text-transform:uppercase;
     }
     header h1 { font-size:17px; font-weight:600; letter-spacing:.2px; }
-    #btn-admin {
+    .header-right { display:flex; align-items:center; gap:10px; }
+    #btn-admin, #btn-manual {
       background:rgba(255,255,255,.15); border:1.5px solid rgba(255,255,255,.4);
       color:#fff; padding:7px 16px; border-radius:8px; cursor:pointer;
       font-size:13px; font-weight:500; text-decoration:none; transition:background .18s;
       display:flex; align-items:center; gap:6px;
     }
-    #btn-admin:hover { background:rgba(255,255,255,.28); }
+    #btn-admin:hover, #btn-manual:hover { background:rgba(255,255,255,.28); }
+    #overlay-manual {
+      display:none; position:fixed; inset:0;
+      background:rgba(0,0,0,.6); z-index:300;
+      align-items:center; justify-content:center; padding:20px;
+    }
+    #overlay-manual.open { display:flex; }
+    #modal-manual {
+      background:var(--card-bg); border-radius:16px;
+      width:100%; max-width:900px; height:88vh;
+      box-shadow:0 24px 64px rgba(0,0,0,.3);
+      overflow:hidden; display:flex; flex-direction:column; animation:slideUp .2s ease;
+    }
+    .manual-header {
+      background:linear-gradient(135deg, var(--brand) 0%, var(--accent) 100%);
+      padding:16px 24px; color:#fff; display:flex; align-items:center; justify-content:space-between;
+    }
+    .manual-header h2 { font-size:16px; font-weight:600; }
+    #manual-close {
+      background:rgba(255,255,255,.15); border:none; color:#fff;
+      width:32px; height:32px; border-radius:50%; cursor:pointer;
+      font-size:17px; display:flex; align-items:center; justify-content:center;
+    }
+    #manual-close:hover { background:rgba(255,255,255,.3); }
+    #manual-frame { flex:1; border:none; width:100%; }
 
     .toolbar { padding:24px 32px 0; display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
     #search-wrap { position:relative; flex:1; min-width:220px; max-width:400px; }
@@ -172,9 +198,12 @@
     <div class="logo">Homy</div>
     <h1>📞 Lista de Ramais</h1>
   </div>
-  <a id="btn-admin"
-     href="https://homyquimica.sharepoint.com/sites/Ramais-Homy/Lists/Ramais/AllItems.aspx"
-     target="_blank">✏️ Gerenciar Ramais</a>
+  <div class="header-right">
+    <button id="btn-manual">📖 Manual MicroSIP</button>
+    <a id="btn-admin"
+       href="https://homyquimica.sharepoint.com/sites/Ramais-Homy/Lists/Ramais/AllItems.aspx"
+       target="_blank">✏️ Gerenciar Ramais</a>
+  </div>
 </header>
 
 <div class="toolbar">
@@ -190,6 +219,19 @@
 
 <div id="loading"><div class="spinner"></div><span>Carregando ramais…</span></div>
 <div id="grid" style="display:none"></div>
+
+<!-- MODAL MANUAL -->
+<div id="overlay-manual">
+  <div id="modal-manual">
+    <div class="manual-header">
+      <h2>📖 Facilidades no uso do MicroSIP</h2>
+      <button id="manual-close">✕</button>
+    </div>
+    <iframe id="manual-frame"
+      src="https://view.officeapps.live.com/op/embed.aspx?src=https://eduardadefiume-homy.github.io/ramais-homy/Facilidades%20no%20uso%20do%20MicroSIP.docx">
+    </iframe>
+  </div>
+</div>
 
 <!-- MODAL -->
 <div id="overlay">
@@ -300,6 +342,9 @@ async function fetchRamais(token) {
 document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("search").addEventListener("input", renderAll);
   document.getElementById("modal-close").addEventListener("click", closeModal);
+  document.getElementById("btn-manual").addEventListener("click", () => document.getElementById("overlay-manual").classList.add("open"));
+  document.getElementById("manual-close").addEventListener("click", () => document.getElementById("overlay-manual").classList.remove("open"));
+  document.getElementById("overlay-manual").addEventListener("click", e => { if(e.target===document.getElementById("overlay-manual")) document.getElementById("overlay-manual").classList.remove("open"); });
   document.getElementById("overlay").addEventListener("click", e => {
     if (e.target === document.getElementById("overlay")) closeModal();
   });
