@@ -45,7 +45,7 @@
     header h1 { font-size:17px; font-weight:600; letter-spacing:.2px; }
     .header-right { display:flex; align-items:center; gap:10px; }
     #btn-admin { display:none; }
-    #btn-manual {
+    #btn-externos, #btn-manual {
       background:rgba(255,255,255,.15); border:1.5px solid rgba(255,255,255,.4);
       color:#fff; padding:7px 16px; border-radius:8px; cursor:pointer;
       font-size:13px; font-weight:500; text-decoration:none; transition:background .18s;
@@ -57,7 +57,7 @@
       font-size:13px; font-weight:500; text-decoration:none; transition:background .18s;
       align-items:center; gap:6px;
     }
-    #btn-admin:hover, #btn-manual:hover { background:rgba(255,255,255,.28); }
+    #btn-admin:hover, #btn-manual:hover, #btn-externos:hover { background:rgba(255,255,255,.28); }
     #overlay-manual {
       display:none; position:fixed; inset:0;
       background:rgba(0,0,0,.6); z-index:300;
@@ -198,6 +198,79 @@
     .info-content a { font-size:15px; font-weight:600; color:var(--brand); text-decoration:none; }
     .info-content a:hover { text-decoration:underline; }
 
+
+    /* ── TABS ── */
+    .tabs-bar { display:flex; gap:4px; padding:20px 32px 0; border-bottom:2px solid var(--border); }
+    .tab-btn {
+      padding:8px 18px; border:none; background:none; cursor:pointer;
+      font-size:13px; font-weight:600; color:var(--text-muted);
+      border-bottom:3px solid transparent; margin-bottom:-2px;
+      transition:all .18s; border-radius:6px 6px 0 0;
+    }
+    .tab-btn:hover { color:var(--brand); background:var(--brand-light); }
+    .tab-btn.active { color:var(--brand); border-bottom-color:var(--brand); background:var(--brand-light); }
+    .tab-panel { display:none; }
+    .tab-panel.active { display:block; }
+
+    /* ── RAMAIS EXTERNOS ── */
+    #externos-wrap { padding:20px 32px 48px; }
+    .ext-section-title {
+      font-size:12px; font-weight:700; color:var(--text-muted);
+      text-transform:uppercase; letter-spacing:.8px;
+      display:flex; align-items:center; gap:10px; margin:20px 0 10px;
+    }
+    .ext-section-title::after { content:''; flex:1; height:1px; background:var(--border); }
+    .ext-table { width:100%; border-collapse:collapse; }
+    .ext-table thead th {
+      background:var(--brand); color:#fff; padding:10px 14px;
+      font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.6px;
+      text-align:left;
+    }
+    .ext-table thead th:last-child { text-align:center; }
+    .ext-table tbody tr:nth-child(even) { background:var(--brand-light); }
+    .ext-table tbody tr:hover { background:#dbeeff; }
+    .ext-table td { padding:9px 14px; font-size:13px; border-bottom:1px solid var(--border); }
+    .ext-table td:last-child { text-align:center; }
+    .ext-code {
+      display:inline-block; background:var(--brand); color:#fff;
+      font-weight:800; font-size:15px; padding:3px 12px; border-radius:6px;
+      letter-spacing:1px;
+    }
+    .ext-tag {
+      display:inline-block; font-size:10px; font-weight:700; padding:2px 8px;
+      border-radius:10px; text-transform:uppercase; letter-spacing:.4px;
+    }
+    .ext-tag.celular-homy { background:#FEF3C7; color:#92400E; }
+    .ext-tag.celular      { background:#E0F2FE; color:#075985; }
+    .ext-tag.pabx         { background:#F3E8FF; color:#6B21A8; }
+    .ext-tag.emergencia   { background:#FEE2E2; color:#991B1B; }
+    .ext-tag.servico      { background:#DCFCE7; color:#166534; }
+    .ext-note {
+      margin-top:12px; padding:12px 16px; background:#FEF3C7;
+      border-left:4px solid #F59E0B; border-radius:0 8px 8px 0;
+      font-size:12px; color:#78350F;
+    }
+
+    /* ── ÍCONES TEAMS / WHATSAPP nos cards ── */
+    .card-icon-badge.teams { background:#f0ebff; border-color:#7B5EA7; }
+    .card-icon-badge.whatsapp { background:#e8f8ee; border-color:#25D366; }
+
+    /* ── MODAL melhorado ── */
+    .info-actions { display:flex; gap:8px; margin-top:4px; flex-wrap:wrap; }
+    .action-btn {
+      display:inline-flex; align-items:center; gap:5px;
+      padding:5px 12px; border-radius:20px; font-size:12px; font-weight:600;
+      text-decoration:none; cursor:pointer; border:none; transition:all .15s;
+    }
+    .action-btn.email   { background:#EAF3FA; color:var(--brand); }
+    .action-btn.teams   { background:#f0ebff; color:#7B5EA7; }
+    .action-btn.whatsapp{ background:#e8f8ee; color:#128C7E; }
+    .action-btn:hover   { opacity:.85; transform:translateY(-1px); }
+
+    /* SVG icons inline */
+    .icon-teams  { width:14px; height:14px; vertical-align:middle; }
+    .icon-wpp    { width:14px; height:14px; vertical-align:middle; }
+
     @media(max-width:600px) {
       header { padding:0 16px; }
       .toolbar, #grid, .stats { padding-left:16px; padding-right:16px; }
@@ -212,6 +285,7 @@
     <h1>📞 Lista de Ramais</h1>
   </div>
   <div class="header-right">
+    <button id="btn-externos">🔢 Ramais Externos</button>
     <button id="btn-manual">📖 Manual MicroSIP</button>
     <a id="btn-admin"
        href="https://homyquimica.sharepoint.com/sites/Ramais-Homy/Lists/Ramais/AllItems.aspx"
@@ -220,6 +294,15 @@
 </header>
 
 <img id="watermark" src="homy_logo_4k_optimized.webp" alt="">
+
+<!-- TABS -->
+<div class="tabs-bar">
+  <button class="tab-btn active" data-tab="internos">📞 Ramais Internos</button>
+  <button class="tab-btn" data-tab="externos">🔢 Ramais Externos</button>
+</div>
+
+<!-- PAINEL INTERNOS -->
+<div id="tab-internos" class="tab-panel active">
 <div class="toolbar">
   <div id="search-wrap">
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
@@ -231,8 +314,74 @@
 </div>
 <p class="stats" id="stats"></p>
 
+</div><!-- /toolbar -->
 <div id="loading"><div class="spinner"></div><span>Carregando ramais…</span></div>
 <div id="grid" style="display:none"></div>
+
+</div><!-- /tab-internos -->
+
+<!-- PAINEL EXTERNOS -->
+<div id="tab-externos" class="tab-panel">
+<div id="externos-wrap">
+  <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">
+    Códigos para discagem rápida no <strong>MicroSIP</strong>. Digite o código para acessar o ramal/linha externo direto pelo telefone corporativo.
+  </p>
+
+  <div class="ext-section-title">🚨 Emergências e Serviços Públicos</div>
+  <table class="ext-table">
+    <thead><tr><th>Nome / Serviço</th><th>Tipo</th><th>Código</th></tr></thead>
+    <tbody>
+      <tr><td>Bombeiros</td><td><span class="ext-tag emergencia">Emergência · 193</span></td><td><span class="ext-code">711</span></td></tr>
+      <tr><td>Polícia Militar</td><td><span class="ext-tag emergencia">Emergência · 190</span></td><td><span class="ext-code">727</span></td></tr>
+      <tr><td>Polícia Rodoviária</td><td><span class="ext-tag emergencia">Emergência</span></td><td><span class="ext-code">749</span></td></tr>
+      <tr><td>Pronto Socorro Jardinópolis</td><td><span class="ext-tag emergencia">Saúde</span></td><td><span class="ext-code">729</span></td></tr>
+      <tr><td>CETESB</td><td><span class="ext-tag servico">0800</span></td><td><span class="ext-code">714</span></td></tr>
+      <tr><td>Entrevias</td><td><span class="ext-tag servico">0800</span></td><td><span class="ext-code">715</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="ext-section-title">🏢 Empresas Parceiras (PABX)</div>
+  <table class="ext-table">
+    <thead><tr><th>Empresa</th><th>Tipo</th><th>Código</th></tr></thead>
+    <tbody>
+      <tr><td>Agrobiotech</td><td><span class="ext-tag pabx">PABX</span></td><td><span class="ext-code">717</span></td></tr>
+      <tr><td>Aratrop</td><td><span class="ext-tag pabx">PABX</span></td><td><span class="ext-code">710</span></td></tr>
+      <tr><td>Cinborg</td><td><span class="ext-tag pabx">PABX</span></td><td><span class="ext-code">740</span></td></tr>
+      <tr><td>Copagaz</td><td><span class="ext-tag pabx">PABX</span></td><td><span class="ext-code">712</span></td></tr>
+      <tr><td>CPFL Jardinópolis</td><td><span class="ext-tag pabx">PABX</span></td><td><span class="ext-code">713</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="ext-section-title">🍽️ Serviços e Fornecedores</div>
+  <table class="ext-table">
+    <thead><tr><th>Nome / Serviço</th><th>Tipo</th><th>Código</th></tr></thead>
+    <tbody>
+      <tr><td>Choppin – Marmitex</td><td><span class="ext-tag servico">Serviço</span></td><td><span class="ext-code">744</span></td></tr>
+      <tr><td>Posto Berardo</td><td><span class="ext-tag servico">Serviço</span></td><td><span class="ext-code">741</span></td></tr>
+      <tr><td>Vascon (Refeições)</td><td><span class="ext-tag servico">Serviço</span></td><td><span class="ext-code">725</span></td></tr>
+      <tr><td>Van Empregados Jardinópolis – Van Paim</td><td><span class="ext-tag servico">Transporte</span></td><td><span class="ext-code">719</span></td></tr>
+      <tr><td>Van Empregados Rib. Preto – Van Karol</td><td><span class="ext-tag servico">Transporte</span></td><td><span class="ext-code">718</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="ext-section-title">📱 Celulares Homy (Ramal direto)</div>
+  <table class="ext-table">
+    <thead><tr><th>Colaborador</th><th>Tipo</th><th>Código</th></tr></thead>
+    <tbody>
+      <tr><td>Fábia – Adm Geral</td><td><span class="ext-tag celular-homy">Celular Homy</span></td><td><span class="ext-code">720</span></td></tr>
+      <tr><td>Gabriela – RH</td><td><span class="ext-tag celular-homy">Celular Homy</span></td><td><span class="ext-code">752</span></td></tr>
+      <tr><td>José Danilo – SGI</td><td><span class="ext-tag celular-homy">Celular Homy</span></td><td><span class="ext-code">751</span></td></tr>
+      <tr><td>Thiago – Produção</td><td><span class="ext-tag celular-homy">Celular Homy</span></td><td><span class="ext-code">750</span></td></tr>
+      <tr><td>Danilo Guedes – Manutenção</td><td><span class="ext-tag celular-homy">Celular Homy</span></td><td><span class="ext-code">748</span></td></tr>
+      <tr><td>Dener – Portaria Noturna</td><td><span class="ext-tag celular">Celular</span></td><td><span class="ext-code">716</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="ext-note">
+    💡 <strong>Como usar:</strong> No MicroSIP, disque o código correspondente. Os ramais marcados como <strong>Celular Homy</strong> caem diretamente no celular corporativo do colaborador. Os marcados como <strong>PABX</strong> conectam à central da empresa parceira.
+  </div>
+</div>
+</div><!-- /tab-externos -->
 
 <!-- MODAL MANUAL -->
 <div id="overlay-manual">
@@ -262,11 +411,17 @@
       </div>
       <div class="info-row" id="row-email" style="display:none">
         <div class="info-icon">✉️</div>
-        <div class="info-content"><label>E-mail</label><a id="m-email" href="#"></a></div>
+        <div class="info-content">
+          <label>Contato Digital</label>
+          <div class="info-actions" id="m-actions-email"></div>
+        </div>
       </div>
       <div class="info-row" id="row-celular" style="display:none">
         <div class="info-icon">📱</div>
-        <div class="info-content"><label>Celular / WhatsApp</label><a id="m-celular" href="#" target="_blank"></a></div>
+        <div class="info-content">
+          <label>Celular / WhatsApp</label>
+          <div class="info-actions" id="m-actions-cel"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -355,6 +510,22 @@ async function fetchRamais(token) {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+  // Tab switching
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+  // Botão header externos
+  document.getElementById("btn-externos").addEventListener("click", () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelector('[data-tab="externos"]').classList.add('active');
+    document.getElementById('tab-externos').classList.add('active');
+  });
   document.getElementById("search").addEventListener("input", renderAll);
   document.getElementById("modal-close").addEventListener("click", closeModal);
   document.getElementById("btn-manual").addEventListener("click", () => document.getElementById("overlay-manual").classList.add("open"));
@@ -438,6 +609,19 @@ function createCard(d) {
   const card = document.createElement("div"); card.className = "card";
   const icon = SETOR_ICONS[d.Departamento] || "📞";
   const hasContact = d.Email || d.Celular;
+  const isTeamsOnly = d.Email && !d.Email.includes("@");   // campo email usado como flag Teams
+  const hasWpp = d.Celular && d.Celular.trim() !== "";
+  // Ícone email/Teams
+  let emailIcon = "";
+  if (d.Email) {
+    const isTeams = !d.Email.includes("@");
+    emailIcon = isTeams
+      ? `<div class="card-icon-badge teams" title="Teams: ${d.Email}"><svg class="icon-teams" viewBox="0 0 24 24" fill="#7B5EA7"><path d="M19.5 8.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5zM15 9.75h-1.5v7.5a3 3 0 003 3h3a3 3 0 003-3v-4.5a3 3 0 00-3-3H15zM10.5 6a3 3 0 11-6 0 3 3 0 016 0zM3 13.5A3.75 3.75 0 016.75 9.75h3A3.75 3.75 0 0113.5 13.5v4.5a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-4.5z"/></svg></div>`
+      : `<div class="card-icon-badge" title="${d.Email}">✉️</div>`;
+  }
+  const celIcon = d.Celular
+    ? `<div class="card-icon-badge whatsapp" title="WhatsApp: ${d.Celular}"><svg class="icon-wpp" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.984-1.408A9.96 9.96 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.946 7.946 0 01-4.274-1.247l-.306-.182-3.154.891.904-3.065-.2-.316A7.967 7.967 0 014 12c0-4.418 3.582-8 8-8s8 3.582 8 8-3.582 8-8 8z"/></svg></div>`
+    : "";
   card.innerHTML = `
     <div class="card-top">
       <div class="card-avatar">${getInitials(d.Nome) || icon}</div>
@@ -445,10 +629,7 @@ function createCard(d) {
     </div>
     <div class="card-ramal-row">
       <div><div class="ramal-number">${d.Ramal}</div><div class="ramal-label">RAMAL</div></div>
-      <div class="card-icons">
-        ${d.Email  ? `<div class="card-icon-badge" title="${d.Email}">✉️</div>` : ""}
-        ${d.Celular? `<div class="card-icon-badge" title="${d.Celular}">📱</div>` : ""}
-      </div>
+      <div class="card-icons">${emailIcon}${celIcon}</div>
     </div>`;
   if (hasContact) card.addEventListener("click", () => openModal(d));
   return card;
@@ -462,10 +643,47 @@ function openModal(d) {
   document.getElementById("m-nome").textContent = d.Nome;
   document.getElementById("m-dept").textContent = d.Departamento;
   document.getElementById("m-ramal").textContent = d.Ramal;
-  const rowE = document.getElementById("row-email"), rowC = document.getElementById("row-celular");
-  const elE  = document.getElementById("m-email"),   elC  = document.getElementById("m-celular");
-  if (d.Email)   { elE.textContent = d.Email;   elE.href = `mailto:${d.Email}`;                          rowE.style.display = "flex"; } else rowE.style.display = "none";
-  if (d.Celular) { const n = d.Celular.replace(/\D/g,""); elC.textContent = d.Celular; elC.href = `https://wa.me/55${n}`; rowC.style.display = "flex"; } else rowC.style.display = "none";
+
+  const rowE = document.getElementById("row-email");
+  const rowC = document.getElementById("row-celular");
+  const actE = document.getElementById("m-actions-email");
+  const actC = document.getElementById("m-actions-cel");
+
+  // E-mail / Teams
+  if (d.Email) {
+    actE.innerHTML = "";
+    const isTeams = !d.Email.includes("@");
+    if (!isTeams) {
+      const btnMail = document.createElement("a");
+      btnMail.href = `mailto:${d.Email}`; btnMail.className = "action-btn email"; btnMail.textContent = "✉️ " + d.Email;
+      actE.appendChild(btnMail);
+    }
+    // Botão Teams sempre (email ou username)
+    const teamsUser = isTeams ? d.Email : d.Email;
+    const btnTeams = document.createElement("a");
+    btnTeams.href = `https://teams.microsoft.com/l/chat/0/0?users=${teamsUser}`;
+    btnTeams.target = "_blank"; btnTeams.className = "action-btn teams";
+    btnTeams.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19.5 8.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5zM15 9.75h-1.5v7.5a3 3 0 003 3h3a3 3 0 003-3v-4.5a3 3 0 00-3-3H15zM10.5 6a3 3 0 11-6 0 3 3 0 016 0zM3 13.5A3.75 3.75 0 016.75 9.75h3A3.75 3.75 0 0113.5 13.5v4.5a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-4.5z"/></svg> Abrir Teams`;
+    actE.appendChild(btnTeams);
+    rowE.style.display = "flex";
+  } else {
+    rowE.style.display = "none";
+  }
+
+  // Celular / WhatsApp
+  if (d.Celular) {
+    actC.innerHTML = "";
+    const n = d.Celular.replace(/\D/g, "");
+    const btnWpp = document.createElement("a");
+    btnWpp.href = `https://wa.me/55${n}`; btnWpp.target = "_blank";
+    btnWpp.className = "action-btn whatsapp";
+    btnWpp.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.984-1.408A9.96 9.96 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.946 7.946 0 01-4.274-1.247l-.306-.182-3.154.891.904-3.065-.2-.316A7.967 7.967 0 014 12c0-4.418 3.582-8 8-8s8 3.582 8 8-3.582 8-8 8z"/></svg> ${d.Celular}`;
+    actC.appendChild(btnWpp);
+    rowC.style.display = "flex";
+  } else {
+    rowC.style.display = "none";
+  }
+
   document.getElementById("overlay").classList.add("open");
 }
 
